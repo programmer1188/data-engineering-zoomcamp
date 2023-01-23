@@ -1,6 +1,4 @@
->[Back to Index](README.md)
 
->Next: [Data Ingestion](2_data_ingestion.md)
 
 ### Table of contents
 
@@ -128,8 +126,9 @@ docker build -t test:pandas .
 
 We can now run the container and pass an argument to it, so that our pipeline will receive it:
 
+* To run any file in bash(git cmd) add winpty before docker 
 ```ssh
-docker run -it test:pandas some_number
+winpty docker run -it test:pandas some_number
 ```
 
 You should get the same output you did when you ran the pipeline script by itself.
@@ -147,11 +146,11 @@ You can run a containerized version of Postgres that doesn't require any install
 Create a folder anywhere you'd like for Postgres to store data in. We will use the example folder `ny_taxi_postgres_data`. Here's how to run the container:
 
 ```bash
-docker run -it \
+winpty docker run -it \
     -e POSTGRES_USER="root" \
     -e POSTGRES_PASSWORD="root" \
     -e POSTGRES_DB="ny_taxi" \
-    -v $(pwd)/ny_taxi_postgres_data:/var/lib/postgresql/data \
+    -v /d:/data_engineering/ny_taxi_postgres_data:/var/lib/postgresql/data \
     -p 5432:5432 \
     postgres:13
 ```
@@ -169,7 +168,7 @@ docker run -it \
 Once the container is running, we can log into our database with [pgcli](https://www.pgcli.com/) with the following command:
 
 ```bash
-pgcli -h localhost -p 5432 -u root -d ny_taxi
+winpty pgcli -h localhost -p 5432 -u root -d ny_taxi
 ```
 * `-h` is the host. Since we're running locally we can use `localhost`.
 * `-p` is the port.
@@ -206,11 +205,11 @@ docker network create pg-network
 We will now re-run our Postgres container with the added network name and the container network name, so that the pgAdmin container can find it (we'll use `pg-database` for the container name):
 
 ```bash
-docker run -it \
+winpty docker run -it \
     -e POSTGRES_USER="root" \
     -e POSTGRES_PASSWORD="root" \
     -e POSTGRES_DB="ny_taxi" \
-    -v $(pwd)/ny_taxi_postgres_data:/var/lib/postgresql/data \
+    -v /d:/data_engineering/ny_taxi_postgres_data:/var/lib/postgresql/data \
     -p 5432:5432 \
     --network=pg-network \
     --name pg-database \
@@ -220,7 +219,7 @@ docker run -it \
 We will now run the pgAdmin container on another terminal:
 
 ```bash
-docker run -it \
+winpty docker run -it \
     -e PGADMIN_DEFAULT_EMAIL="admin@admin.com" \
     -e PGADMIN_DEFAULT_PASSWORD="root" \
     -p 8080:80 \
@@ -297,7 +296,7 @@ python ingest_data.py \
     --port=5432 \
     --db=ny_taxi \
     --table_name=yellow_taxi_trips \
-    --url="https://s3.amazonaws.com/nyc-tlc/trip+data/yellow_tripdata_2021-01.csv"
+    --url="https://github.com/DataTalksClub/nyc-tlc-data/releases/download/yellow/yellow_tripdata_2021-01.csv.gz"
 ```
 * Note that we've changed the table name from `yellow_taxi_data` to `yellow_taxi_trips`.
 
@@ -336,7 +335,7 @@ docker build -t taxi_ingest:v001 .
 
 And run it:
 ```bash
-docker run -it \
+winpty docker run -it \
     --network=pg-network \
     taxi_ingest:v001 \
     --user=root \
@@ -345,7 +344,7 @@ docker run -it \
     --port=5432 \
     --db=ny_taxi \
     --table_name=yellow_taxi_trips \
-    --url="https://s3.amazonaws.com/nyc-tlc/trip+data/yellow_tripdata_2021-01.csv"
+    --url="https://github.com/DataTalksClub/nyc-tlc-data/releases/download/yellow/yellow_tripdata_2021-01.csv.gz"
 ```
 * We need to provide the network for Docker to find the Postgres container. It goes before the name of the image.
 * Since Postgres is running on a separate container, the host argument will have to point to the container name of Postgres.
