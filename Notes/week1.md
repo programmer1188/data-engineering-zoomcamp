@@ -410,7 +410,7 @@ If you want to re-run the dockerized ingest script when you run Postgres and pgA
 
 ## SQL refresher
 
-Below are a series of SQL query examples to remember how SQL works. For this example we'll asume that we're working with 2 tables named `trips` (list of all yelow taxi trips of NYC for January 2021) and `zones` (list of zone IDs for pick ups and drop offs).
+Below are a series of SQL query examples to remember how SQL works. For this example we'll asume that we're working with 2 tables named `yellow_taxi_trips` (list of all yelow taxi trips of NYC for January 2021) and `zones` (list of zone IDs for pick ups and drop offs).
 
 >Check the [homework](https://github.com/DataTalksClub/data-engineering-zoomcamp/blob/main/week_1_basics_n_setup/homework.md) for the session to learn about the `zones` table.
 
@@ -420,7 +420,7 @@ Below are a series of SQL query examples to remember how SQL works. For this exa
 SELECT
     *
 FROM
-    trips
+    yellow_taxi_trips
 LIMIT 100;
 ```
 * Selects all rows in the `trips` table. If there are more than 100 rows, select only the first 100.
@@ -429,7 +429,7 @@ LIMIT 100;
 SELECT
     *
 FROM
-    trips t,
+    yellow_taxi_trips t,
     zones zpu,
     zones zdo
 WHERE
@@ -438,7 +438,7 @@ WHERE
 LIMIT 100;
 ```
 * Selects all rows in the `trips` table. If there are more than 100 rows, select only the first 100.
-* We give aliases to the `trips` and `zones` tables for easier access.
+* We give aliases to the `yellow_taxi_trips` and `zones` tables for easier access.
 * We replace the IDs inside `PULocationID` and `DOLocationID` with the actual zone IDs for pick ups and drop offs.
 * We use double quotes (`""`) for the column names because in Postgres we need to use them if the column names contains capital letters.
 
@@ -450,7 +450,7 @@ SELECT
     CONCAT(zpu."Borough", '/', zpu."Zone") AS "pickup_loc",
     CONCAT(zdo."Borough", '/', zdo."Zone") AS "dropoff_loc"
 FROM
-    trips t,
+    yellow_taxi_trips t,
     zones zpu,
     zones zdo
 WHERE
@@ -473,7 +473,7 @@ SELECT
     CONCAT(zpu."Borough", '/', zpu."Zone") AS "pickup_loc",
     CONCAT(zdo."Borough", '/', zdo."Zone") AS "dropoff_loc"
 FROM
-    trips t JOIN zones zpu
+    yellow_taxi_trips t JOIN zones zpu
         ON t."PULocationID" = zpu."LocationID"
     JOIN zones zdo
         ON t."DOLocationID" = zdo."LocationID"
@@ -496,12 +496,12 @@ SELECT
     "PULocationID",
     "DOLocationID"
 FROM
-    trips t
+    yellow_taxi_trips t
 WHERE
     "PULocationID" is NULL
 LIMIT 100;
 ```
-* Selects rows from the `trips` table whose pick up location is null and displays specific columns.
+* Selects rows from the `yellow_taxi_trips` table whose pick up location is null and displays specific columns.
 * If you have not modified the original tables, this query should return an empty list.
 
 ```sql
@@ -512,7 +512,7 @@ SELECT
     "PULocationID",
     "DOLocationID"
 FROM
-    trips t
+    yellow_taxi_trips t
 WHERE
     "DOLocationID" NOT IN (
         SELECT "LocationID" FROM zones
@@ -536,7 +536,7 @@ SELECT
     CONCAT(zpu."Borough", '/', zpu."Zone") AS "pickup_loc",
     CONCAT(zdo."Borough", '/', zdo."Zone") AS "dropoff_loc"
 FROM
-    trips t LEFT JOIN zones zpu
+    yellow_taxi_trips t LEFT JOIN zones zpu
         ON t."PULocationID" = zpu."LocationID"
     LEFT JOIN zones zdo
         ON t."DOLocationID" = zdo."LocationID"
@@ -554,10 +554,10 @@ SELECT
     DATE_TRUNC('DAY', tpep_pickup_datetime),
     total_amount,
 FROM
-    trips t
+    yellow_taxi_trips t
 LIMIT 100;
 ```
-* Selects all rows from the `trips` table but displays specific columns.
+* Selects all rows from the `yellow_taxi_trips` table but displays specific columns.
 * `DATE_TRUNC` is a function that trunctates a timestamp. When using `DAY` as a parameter, it removes any smaller values (hours, minutes, seconds) and displays them as `00:00:00` instead.
 
 ```sql
@@ -567,7 +567,7 @@ SELECT
     CAST(tpep_pickup_datetime AS DATE) as "day",
     total_amount,
 FROM
-    trips t
+    yellow_taxi_trips t
 LIMIT 100;
 ```
 * Very similar to previous query, but instead it casts the `TIMESTAMP` type to `DATE`, so that the hours:minutes:seconds info is completely omitted rather than show as `00:00:00`. The columns will be displayed under the name `day`.
@@ -577,7 +577,7 @@ SELECT
     CAST(tpep_pickup_datetime AS DATE) as "day",
     COUNT(1)
 FROM
-    trips t
+    yellow_taxi_trips t
 GROUP BY
     CAST(tpep_pickup_datetime AS DATE)
 ORDER BY "day" ASC;
@@ -593,7 +593,7 @@ SELECT
     MAX(total_amount),
     MAX(passenger_count)
 FROM
-    trips t
+    yellow_taxi_trips t
 GROUP BY
     CAST(tpep_pickup_datetime AS DATE)
 ORDER BY "count" DESC;
@@ -609,7 +609,7 @@ SELECT
     MAX(total_amount),
     MAX(passenger_count)
 FROM
-    trips t
+    yellow_taxi_trips t
 GROUP BY
     1, 2
 ORDER BY "count" DESC;
@@ -626,7 +626,7 @@ SELECT
     MAX(total_amount),
     MAX(passenger_count)
 FROM
-    trips t
+    yellow_taxi_trips t
 GROUP BY
     1, 2
 ORDER BY
