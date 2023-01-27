@@ -552,7 +552,7 @@ SELECT
     tpep_pickup_datetime,
     tpep_dropoff_datetime,
     DATE_TRUNC('DAY', tpep_pickup_datetime),
-    total_amount,
+    total_amount
 FROM
     yellow_taxi_trips t
 LIMIT 100;
@@ -565,7 +565,7 @@ SELECT
     tpep_pickup_datetime,
     tpep_dropoff_datetime,
     CAST(tpep_pickup_datetime AS DATE) as "day",
-    total_amount,
+    total_amount
 FROM
     yellow_taxi_trips t
 LIMIT 100;
