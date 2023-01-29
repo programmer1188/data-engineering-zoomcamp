@@ -25,6 +25,8 @@ How many python packages/modules are installed?
 
 - 3
 
+![alt text](https://github.com/programmer1188/data-engineering-zoomcamp/blob/main/Home_work/Week1/hw_1_2.png)
+
 # Prepare Postgres
 
 Run Postgres and load data as shown in the videos
@@ -49,6 +51,7 @@ Remember that `lpep_pickup_datetime` and `lpep_dropoff_datetime` columns are in 
 
 - 20530
 
+![alt text](https://github.com/programmer1188/data-engineering-zoomcamp/blob/main/Home_work/Week1/hw_1_3.png)
 
 ## Question 4. Largest trip for each day
 
@@ -57,12 +60,15 @@ Use the pick up time for your calculations.
 
 - 2019-01-28
 
+![alt text](https://github.com/programmer1188/data-engineering-zoomcamp/blob/main/Home_work/Week1/hw_1_4.png)
+
 ## Question 5. The number of passengers
 
 In 2019-01-01 how many trips had 2 and 3 passengers?
  
 - 2: 1282 ; 3: 254
 
+![alt text](https://github.com/programmer1188/data-engineering-zoomcamp/blob/main/Home_work/Week1/hw_1_5.png)
 
 ## Question 6. Largest tip
 
@@ -73,6 +79,7 @@ Note: it's not a typo, it's `tip` , not `trip`
 
 - Long Island City/Queens Plaza
 
+![alt text](https://github.com/programmer1188/data-engineering-zoomcamp/blob/main/Home_work/Week1/hw_1_6.png)
 
 ## Submitting the solutions
 
