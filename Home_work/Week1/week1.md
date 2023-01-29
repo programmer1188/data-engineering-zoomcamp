@@ -14,6 +14,8 @@ Which tag has the following text? - *Write the image ID to the file*
 
 - `--iidfile string`
 
+![alt text](https://github.com/programmer1188/data-engineering-zoomcamp/blob/main/Home_work/Week1/hw_1_1.png)
+
 
 ## Question 2. Understanding docker first run 
 
